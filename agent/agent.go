@@ -752,6 +752,7 @@ func (a *Agent) reloadWatches(cfg *config.RuntimeConfig) error {
 			if config.Scheme == "https" {
 				addr = "https://" + config.TLSConfig.Address
 			}
+			a.logger.Printf("[DEBUG] agent: reloadWatches will be using %s", addr)
 
 			if err := wp.RunWithConfig(addr, config); err != nil {
 				a.logger.Printf("[ERR] agent: Failed to run watch: %v", err)
@@ -2112,6 +2113,9 @@ func (a *Agent) setupTLSClientConfig(skipVerify bool) (tlsClientConfig *tls.Conf
 		tlsConfig.CAPath = a.config.CAPath
 	}
 	tlsClientConfig, err = api.SetupTLSConfig(tlsConfig)
+
+	a.logger.Printf("[DEBUG] agent: setupTLSClientConfig setting tlsConfig.Address: %s, tlsConfig.KeyFile: %s, tlsConfig.CertFile: %s, tlsConfig.CAFile: %s, tlsConfig.CAPath: %s", tlsConfig.Address, tlsConfig.KeyFile, tlsConfig.CertFile, tlsConfig.CAFile, tlsConfig.CAPath)
+
 	return
 }
 
